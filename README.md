@@ -23,7 +23,7 @@ Cette API fournit un système complet pour la gestion des données d'équipement
 
 1. Cloner le dépôt
 ```bash
-git clone https://github.com/slahdar/equipment-api.git
+git clone https://github.com/Slahdar/equipment-api.git
 cd equipment-api
 ```
 
@@ -504,16 +504,3 @@ Cela rend les fichiers accessibles via le chemin d'URL `/storage/documents/`.
 - Un **Produit** possède plusieurs **Inventaires**
 - Un **Document** appartient à un **Type de document** et possède plusieurs **Produits** (relation plusieurs-à-plusieurs)
 - Un **Inventaire** appartient à un **Produit** et une **Marque**
-
-## Améliorations futures
-
-Améliorations potentielles à considérer :
-
-1. Implémentation de la pagination pour les grands ensembles de données
-2. Ajout de capacités de recherche et de filtrage
-3. Implémentation de mise en cache pour améliorer les performances
-4. Ajout du support pour plus de formats de documents (au-delà du PDF)
-5. Implémentation du versionnement pour les documents
-6. Ajout de capacités d'exportation pour les rapports
-7. Implémentation de webhooks pour l'intégration avec d'autres systèmes
-8. Ajout d'authentification à deux facteurs pour une sécurité renforcée
