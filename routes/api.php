@@ -23,6 +23,37 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/domains', [DomainController::class, 'index']);
+Route::get('/domains/{domain}', [DomainController::class, 'show']);
+
+Route::get('/families', [FamilyController::class, 'index']);
+Route::get('/families/{family}', [FamilyController::class, 'show']);
+Route::get('/domains/{domain}/families', [FamilyController::class, 'indexByDomain']);
+
+ Route::get('/equipment-types', [EquipmentTypeController::class, 'index']);
+ Route::get('/equipment-types/{equipmentType}', [EquipmentTypeController::class, 'show']);
+Route::get('/families/{family}/equipment-types', [EquipmentTypeController::class, 'indexByFamily']);
+
+Route::get('/brands', [BrandController::class, 'index']);
+Route::get('/brands/{brand}', [BrandController::class, 'show']);
+Route::get('/document-types', [DocumentTypeController::class, 'index']);
+Route::get('/document-types/{documentType}', [DocumentTypeController::class, 'show']);
+
+Route::get('/documents', [DocumentController::class, 'index']);
+Route::get('/documents/{document}', [DocumentController::class, 'show']);
+Route::get('/products/{product}/documents', [DocumentController::class, 'indexByProduct']);
+Route::get('/documents/{document}/download', [DocumentController::class, 'download']);
+
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{product}', [ProductController::class, 'show']);
+Route::get('/brands/{brand}/products', [ProductController::class, 'indexByBrand']);
+Route::get('/equipment-types/{equipmentType}/products', [ProductController::class, 'indexByEquipmentType']);
+Route::get('/products/{product}/associated-products', [ProductController::class, 'indexAssociatedProducts']);
+        
+Route::get('/inventories', [InventoryController::class, 'index']);
+Route::get('/inventories/{inventory}', [InventoryController::class, 'show']);
+Route::get('/products/{product}/inventories', [InventoryController::class, 'indexByProduct']);
+        
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     // User information
@@ -42,8 +73,6 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Domains
     Route::group(['middleware' => ['permission:view domains']], function () {
-        Route::get('/domains', [DomainController::class, 'index']);
-        Route::get('/domains/{domain}', [DomainController::class, 'show']);
         
         Route::middleware(['permission:create domains'])->post('/domains', [DomainController::class, 'store']);
         Route::middleware(['permission:edit domains'])->put('/domains/{domain}', [DomainController::class, 'update']);
@@ -52,10 +81,6 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Families
     Route::group(['middleware' => ['permission:view families']], function () {
-        Route::get('/families', [FamilyController::class, 'index']);
-        Route::get('/families/{family}', [FamilyController::class, 'show']);
-        Route::get('/domains/{domain}/families', [FamilyController::class, 'indexByDomain']);
-        
         Route::middleware(['permission:create families'])->post('/families', [FamilyController::class, 'store']);
         Route::middleware(['permission:edit families'])->put('/families/{family}', [FamilyController::class, 'update']);
         Route::middleware(['permission:delete families'])->delete('/families/{family}', [FamilyController::class, 'destroy']);
@@ -63,10 +88,9 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Equipment Types
     Route::group(['middleware' => ['permission:view equipment_types']], function () {
-        Route::get('/equipment-types', [EquipmentTypeController::class, 'index']);
-        Route::get('/equipment-types/{equipmentType}', [EquipmentTypeController::class, 'show']);
-        Route::get('/families/{family}/equipment-types', [EquipmentTypeController::class, 'indexByFamily']);
         
+        
+       
         Route::middleware(['permission:create equipment_types'])->post('/equipment-types', [EquipmentTypeController::class, 'store']);
         Route::middleware(['permission:edit equipment_types'])->put('/equipment-types/{equipmentType}', [EquipmentTypeController::class, 'update']);
         Route::middleware(['permission:delete equipment_types'])->delete('/equipment-types/{equipmentType}', [EquipmentTypeController::class, 'destroy']);
@@ -74,8 +98,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Brands
     Route::group(['middleware' => ['permission:view brands']], function () {
-        Route::get('/brands', [BrandController::class, 'index']);
-        Route::get('/brands/{brand}', [BrandController::class, 'show']);
+        
+        
         
         Route::middleware(['permission:create brands'])->post('/brands', [BrandController::class, 'store']);
         Route::middleware(['permission:edit brands'])->put('/brands/{brand}', [BrandController::class, 'update']);
@@ -84,8 +108,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Document Types
     Route::group(['middleware' => ['permission:view document_types']], function () {
-        Route::get('/document-types', [DocumentTypeController::class, 'index']);
-        Route::get('/document-types/{documentType}', [DocumentTypeController::class, 'show']);
+        
+       
         
         Route::middleware(['permission:create document_types'])->post('/document-types', [DocumentTypeController::class, 'store']);
         Route::middleware(['permission:edit document_types'])->put('/document-types/{documentType}', [DocumentTypeController::class, 'update']);
@@ -94,11 +118,6 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Documents
     Route::group(['middleware' => ['permission:view documents']], function () {
-        Route::get('/documents', [DocumentController::class, 'index']);
-        Route::get('/documents/{document}', [DocumentController::class, 'show']);
-        Route::get('/products/{product}/documents', [DocumentController::class, 'indexByProduct']);
-        Route::get('/documents/{document}/download', [DocumentController::class, 'download']);
-        
         Route::middleware(['permission:create documents'])->post('/documents', [DocumentController::class, 'store']);
         Route::middleware(['permission:edit documents'])->put('/documents/{document}', [DocumentController::class, 'update']);
         Route::middleware(['permission:archive documents'])->patch('/documents/{document}/archive', [DocumentController::class, 'archive']);
@@ -107,12 +126,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Products
     Route::group(['middleware' => ['permission:view products']], function () {
-        Route::get('/products', [ProductController::class, 'index']);
-        Route::get('/products/{product}', [ProductController::class, 'show']);
-        Route::get('/brands/{brand}/products', [ProductController::class, 'indexByBrand']);
-        Route::get('/equipment-types/{equipmentType}/products', [ProductController::class, 'indexByEquipmentType']);
-        Route::get('/products/{product}/associated-products', [ProductController::class, 'indexAssociatedProducts']);
-        
+
         Route::middleware(['permission:create products'])->post('/products', [ProductController::class, 'store']);
         Route::middleware(['permission:edit products'])->put('/products/{product}', [ProductController::class, 'update']);
         Route::middleware(['permission:associate products'])->post('/products/{product}/associate', [ProductController::class, 'associateProduct']);
@@ -126,10 +140,7 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Inventories
     Route::group(['middleware' => ['permission:view inventories']], function () {
-        Route::get('/inventories', [InventoryController::class, 'index']);
-        Route::get('/inventories/{inventory}', [InventoryController::class, 'show']);
-        Route::get('/products/{product}/inventories', [InventoryController::class, 'indexByProduct']);
-        
+
         Route::middleware(['permission:create inventories'])->post('/inventories', [InventoryController::class, 'store']);
         Route::middleware(['permission:edit inventories'])->put('/inventories/{inventory}', [InventoryController::class, 'update']);
         Route::middleware(['permission:delete inventories'])->delete('/inventories/{inventory}', [InventoryController::class, 'destroy']);
